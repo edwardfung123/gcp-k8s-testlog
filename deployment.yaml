@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: testlog
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: testlog
+      labels:
+        app: testlog
+    spec:
+      containers:
+      - image: asia.gcr.io/YOUR_GCP_PROJECT_NAME/testlog:latest
+        name: testlog
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /k8s_health
+            port: 8081
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
+        env:
+        - name: NODE_ENV
+          value: production
